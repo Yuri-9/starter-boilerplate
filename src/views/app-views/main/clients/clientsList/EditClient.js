@@ -5,11 +5,12 @@ import Flex from "components/shared-components/Flex";
 import { ROW_GUTTER } from "constants/ThemeConstant";
 import Utils from "utils";
 import useBreakpoint from "antd/lib/grid/hooks/useBreakpoint";
+import UserService from "services/UserService";
 
 const avatarEndpointMock = "https://run.mocky.io/v3/64bd9b50-773d-46a7-b60f-1cc2cf72edb0";
 const avatarUrlMock = "/img/avatars/thumb-6.jpg";
 
-export const EditClient = ({ user, visible, onClose }) => {
+export const EditClient = ({ user, visible, onClose, onUpdateUser }) => {
   const [avatarUrl, setAvatarUrl] = useState(avatarUrlMock);
   const isMobile = !Utils.getBreakPoint(useBreakpoint()).includes("md");
   const [form] = Form.useForm();
@@ -34,24 +35,17 @@ export const EditClient = ({ user, visible, onClose }) => {
     reader.readAsDataURL(img);
   };
 
-  const onFinish = (values) => {
+  const onFinish = (updatedUser) => {
     const key = "updatable";
     message.loading({ content: "Updating...", key });
-    setTimeout(() => {
-      // this.setState({
-      //   name: values.name,
-      //   email: values.email,
-      //   userName: values.userName,
-      //   dateOfBirth: values.dateOfBirth,
-      //   phoneNumber: values.phoneNumber,
-      //   website: values.website,
-      //   address: values.address,
-      //   city: values.city,
-      //   postcode: values.postcode,
-      // });
-      message.success({ content: "Done!", key, duration: 2 });
-      onClose();
-    }, 1000);
+
+    UserService.updateUser(updatedUser)
+      .then(() => {
+        message.success({ content: "Done!", key, duration: 2 });
+        onUpdateUser(updatedUser);
+        onClose();
+      })
+      .catch(() => message.error({ content: "Error!", key, duration: 2 }));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -75,7 +69,7 @@ export const EditClient = ({ user, visible, onClose }) => {
   };
 
   return (
-    <Drawer width={isMobile ? 400 : 600} placement="right" onClose={onClose} visible={visible}>
+    <Drawer forceRender width={isMobile ? 400 : 600} placement="right" onClose={onClose} visible={visible}>
       <Flex alignItems="center" mobileFlex={false} className="text-center text-md-left">
         <Avatar size={90} src={avatarUrl} icon={<UserOutlined />} />
         <div className="ml-md-3 mt-md-0 mt-3">
@@ -137,7 +131,7 @@ export const EditClient = ({ user, visible, onClose }) => {
                 </Col>
                 <Col xs={24} sm={24} md={12}>
                   <Form.Item label="Id" name="id">
-                    <Input />
+                    <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={24} md={12}>

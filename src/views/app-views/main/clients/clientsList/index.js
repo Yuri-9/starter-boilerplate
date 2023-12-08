@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersLoadingAction } from "redux/actions";
+import { getUsersLoadingAction, updateUserAction } from "redux/actions";
 
 import ClientEdit from "./EditClient";
 import AvatarStatus from "components/shared-components/AvatarStatus";
@@ -18,14 +18,18 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState({});
   const [userProfileVisible, setUserProfileVisible] = useState(false);
 
-  const showUserProfile = (userInfo) => {
+  const openModalEdit = (userInfo) => {
     setUserProfileVisible(true);
     setSelectedUser(userInfo);
   };
 
-  const closeUserProfile = () => {
+  const closeModalEdit = () => {
     setUserProfileVisible(false);
     setSelectedUser({});
+  };
+
+  const handleUpdateUser = (user) => {
+    dispatch(updateUserAction(user));
   };
 
   const tableColumns = [
@@ -74,7 +78,6 @@ const UserList = () => {
     },
   ];
 
-  console.log();
   if (loading) return <Loading cover="content" />;
 
   return (
@@ -87,7 +90,7 @@ const UserList = () => {
         onRow={(user) => {
           return {
             onClick: () => {
-              showUserProfile(user);
+              openModalEdit(user);
             },
           };
         }}
@@ -96,9 +99,8 @@ const UserList = () => {
       <ClientEdit
         user={selectedUser}
         visible={userProfileVisible}
-        onClose={() => {
-          closeUserProfile();
-        }}
+        onClose={closeModalEdit}
+        onUpdateUser={handleUpdateUser}
       />
       )
     </Card>

@@ -25,9 +25,15 @@ UserService.getUserById = async function (id) {
 
 UserService.updateUser = async function (user) {
   return axios({
-    url: "/https://jsonplaceholder.typicode.com/users/",
+    url: `https://jsonplaceholder.typicode.com/users/${user.id}`,
     method: "PUT",
-    data: user,
+    data: JSON.stringify(user),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  }).then(async (res) => {
+    await utils.delay(2000);
+    return res;
   });
 };
 

@@ -1,4 +1,4 @@
-import { GET_USERS_LOADING, GET_USERS_SUCCESS, GET_USERS_ERROR } from "../constants/Users";
+import { GET_USERS_LOADING, GET_USERS_SUCCESS, GET_USERS_ERROR, UPDATE_USER } from "../constants/Users";
 
 const initialState = { users: [], loading: false, error: "" };
 
@@ -23,6 +23,21 @@ function usersReducer(state = initialState, { type, payload }) {
         ...state,
         loading: false,
         error: payload,
+      };
+    }
+    case UPDATE_USER: {
+      const users = [...state.users];
+      const newUser = { ...payload };
+      const updatedUsers = users.map((user) => {
+        if (user.id === newUser.id) {
+          return { ...user, ...newUser };
+        }
+        return user;
+      });
+
+      return {
+        ...state,
+        users: updatedUsers,
       };
     }
     default: {
