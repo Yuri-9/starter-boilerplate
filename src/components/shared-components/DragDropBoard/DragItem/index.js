@@ -1,17 +1,25 @@
 import { ItemTypes } from "constants/DragDropConstant";
 import { useDrag } from "react-dnd";
 
-const DragItem = ({ id, x = 0, y = 0, title, typeId, isNew = false, children, style }) => {
-  const [, drag] = useDrag(
+const DragItem = ({ item, isNew = false, children, className, hideSourceOnDrag = false }) => {
+  const { id, x, y, width, height } = item;
+  const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.TABLE,
-      item: { id, x, y, typeId, title, isNew },
+      item: { ...item, isNew },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
     }),
     [id, x, y]
   );
 
+  if (isDragging && hideSourceOnDrag) {
+    return <div ref={drag} />;
+  }
+
   return (
-    <div ref={drag} style={{ ...style, left: x, top: y }}>
+    <div ref={drag} className={className} style={{ left: x, top: y, width, height }}>
       {children}
     </div>
   );

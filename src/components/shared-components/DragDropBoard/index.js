@@ -1,34 +1,12 @@
 import { useCallback, useState } from "react";
 import { v4 as uuid } from "uuid";
+import "./style.scss";
 
 import DragItem from "./DragItem/index.js";
 import Board from "./Board/index.js";
-import { Card } from "antd";
 
-const itemStyles = {
-  position: "absolute",
-  border: "1px dashed gray",
-  backgroundColor: "white",
-  padding: "0.5rem 1rem",
-  cursor: "move",
-  top: 0,
-  left: 0,
-};
-
-const DragDropBoard = () => {
-  const [itemsOnBoard, setItemsOnBoard] = useState({
-    a: { id: "a", x: 80, y: 20, typeId: "aNew", title: "Drag A" },
-    b: { id: "b", x: 20, y: 180, typeId: "bNew", title: "Drag B" },
-    c: { id: "b", x: 20, y: 280, typeId: "bNew", title: "Drag C" },
-  });
-
-  const [newItems, setNewItems] = useState([
-    { typeId: "aNew", x: 30, y: 20, title: "Drag D " },
-    { typeId: "bNew", x: 100, y: 120, title: "Drag E " },
-    { typeId: "cNew", x: 140, y: 220, title: "Drag F " },
-  ]);
-
-  console.log("itemsOnBoard", itemsOnBoard);
+const DragDropBoard = ({ showGrid }) => {
+  const [itemsOnBoard, setItemsOnBoard] = useState([]);
 
   const handleMoveItem = useCallback(
     ({ id, x, y }) => {
@@ -46,18 +24,21 @@ const DragDropBoard = () => {
   }, []);
 
   return (
-    <Card title="Карта заведения">
-      <Board itemsOnBoard={itemsOnBoard} onAddItem={handleAddItem} onMoveItem={handleMoveItem}>
-        {Object.keys(itemsOnBoard).map((key) => {
-          const { x, y, typeId, title } = itemsOnBoard[key];
-          return (
-            <DragItem key={key} id={key} x={x} y={y} typeId={typeId} style={itemStyles}>
-              {title}
-            </DragItem>
-          );
-        })}
-      </Board>
-    </Card>
+    <Board
+      itemsOnBoard={itemsOnBoard}
+      onAddItem={handleAddItem}
+      onMoveItem={handleMoveItem}
+      className={`drag-drop-board ${showGrid ? "grid" : ""}`}
+    >
+      {Object.keys(itemsOnBoard).map((key) => {
+        const { image, title } = itemsOnBoard[key];
+        return (
+          <DragItem key={key} item={itemsOnBoard[key]} className="drag-item" hideSourceOnDrag>
+            <img src={image} alt={title} className="drag-item_image" />
+          </DragItem>
+        );
+      })}
+    </Board>
   );
 };
 export default DragDropBoard;

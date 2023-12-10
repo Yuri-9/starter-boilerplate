@@ -1,13 +1,15 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { Row, Col } from "antd";
+import { Row, Col, Card, Switch } from "antd";
+import { useState } from "react";
+import "./style.scss";
 
-import ItemsList from "./ItemsList";
 import DragDropBoard from "components/shared-components/DragDropBoard";
-
-// import ProductListData from "assets/data/product-list.data.json";
+import ItemsList from "./ItemsList";
+import Flex from "components/shared-components/Flex";
 
 const Scheduler = () => {
+  const [showGrid, setShowGrid] = useState(false);
   return (
     <DndProvider backend={HTML5Backend}>
       <Row gutter={16} wrap={false}>
@@ -15,7 +17,20 @@ const Scheduler = () => {
           <ItemsList />
         </Col>
         <Col flex="none">
-          <DragDropBoard />
+          <Card
+            className="drag-drop-card"
+            title={
+              <Flex mobileFlex={false} justifyContent="between" alignItems="center">
+                <h2 style={{ color: "white" }}>Карта заведения</h2>
+                <div>
+                  <span className="mr-2">Сетка</span>
+                  <Switch onChange={() => setShowGrid((prev) => !prev)} checked={showGrid} />
+                </div>
+              </Flex>
+            }
+          >
+            <DragDropBoard showGrid={showGrid} />
+          </Card>
         </Col>
       </Row>
     </DndProvider>

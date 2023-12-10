@@ -3,13 +3,7 @@ import { useDrop } from "react-dnd";
 
 import { ItemTypes } from "constants/DragDropConstant.js";
 
-const styles = {
-  width: 600,
-  height: 600,
-  border: "1px solid black",
-  position: "relative",
-};
-const Board = ({ onAddItem, onMoveItem, children }) => {
+const Board = ({ onAddItem, onMoveItem, children, className }) => {
   const ref = useRef();
 
   const [, drop] = useDrop(
@@ -39,7 +33,7 @@ const Board = ({ onAddItem, onMoveItem, children }) => {
         ref.current = elem;
         drop(ref);
       }}
-      style={styles}
+      className={className}
     >
       {children}
     </div>

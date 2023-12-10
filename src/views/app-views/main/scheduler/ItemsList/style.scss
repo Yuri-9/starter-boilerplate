@@ -1,0 +1,34 @@
+.drag-list_container {
+  display: flex;
+  overflow-y: auto;
+  gap: 20px;
+  padding: 10px 0;
+  & .card {
+    height: fit-content;
+    flex: 0 0 120px;
+    overflow: hidden;
+    & .image-container {
+      height: 120px;
+      background-color: black;
+      border-radius: 10px;
+      cursor: move;
+    }
+    & .drag_item {
+      height: 100%;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    & .image {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+
+    & .title {
+      width: 100%;
+      padding: 0 10px;
+      text-align: center;
+    }
+  }
+}
