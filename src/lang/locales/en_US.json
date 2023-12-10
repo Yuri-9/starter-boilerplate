@@ -4,6 +4,7 @@
 
   "sidenav.main": "Main",
   "sidenav.main.dashboard": "Dashboard",
+  "sidenav.main.scheduler": "Scheduler",
   "sidenav.main.catalog": "Catalog",
   "sidenav.main.catalog.products": "Products",
   "sidenav.main.catalog.categories": "Categories",
