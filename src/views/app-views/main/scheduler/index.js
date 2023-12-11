@@ -7,6 +7,7 @@ import "./style.scss";
 import DragDropBoard from "components/shared-components/DragDropBoard";
 import ItemsList from "./ItemsList";
 import Flex from "components/shared-components/Flex";
+import ControlPanel from "./ControlPanel";
 
 const Scheduler = () => {
   const [showGrid, setShowGrid] = useState(false);
@@ -15,6 +16,7 @@ const Scheduler = () => {
       <Row gutter={16} wrap={false}>
         <Col flex="auto">
           <ItemsList />
+          <ControlPanel />
         </Col>
         <Col flex="none">
           <Card

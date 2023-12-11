@@ -15,7 +15,6 @@ UserService.getUsers = async function (params) {
 };
 
 UserService.getUserById = async function (id) {
-  console.log("params", id);
   return axios({
     url: "https://jsonplaceholder.typicode.com/users",
     method: "GET",

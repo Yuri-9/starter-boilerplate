@@ -11,6 +11,9 @@
   & .drag-item {
     position: absolute;
     cursor: move;
+    &.active {
+      border: 1px solid red;
+    }
     &_image {
       object-fit: contain;
       width: 100%;

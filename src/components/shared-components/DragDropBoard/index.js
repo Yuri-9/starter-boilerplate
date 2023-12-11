@@ -1,27 +1,34 @@
-import { useCallback, useState } from "react";
-import { v4 as uuid } from "uuid";
+import { useCallback } from "react";
 import "./style.scss";
 
 import DragItem from "./DragItem/index.js";
 import Board from "./Board/index.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addDragItemAction, moveDragItemAction, selectDragItemAction } from "redux/actions/DragTables";
 
 const DragDropBoard = ({ showGrid }) => {
-  const [itemsOnBoard, setItemsOnBoard] = useState([]);
+  const dispatch = useDispatch();
+  const { itemsOnBoard, selectedItemId } = useSelector((state) => state.dragTables);
 
   const handleMoveItem = useCallback(
     ({ id, x, y }) => {
-      setItemsOnBoard((prev) => {
-        const currentItem = { ...prev[id], x, y };
-        return { ...prev, [id]: currentItem };
-      });
+      dispatch(moveDragItemAction({ id, x, y }));
     },
-    [setItemsOnBoard]
+    [dispatch]
   );
 
-  const handleAddItem = useCallback((item) => {
-    const newItem = { ...item, id: uuid() };
-    setItemsOnBoard((prev) => ({ ...prev, [newItem.id]: newItem }));
-  }, []);
+  const handleAddItem = useCallback(
+    (item) => {
+      dispatch(addDragItemAction(item));
+    },
+    [dispatch]
+  );
+  const handleSelectDragItem = useCallback(
+    (id) => {
+      dispatch(selectDragItemAction(id));
+    },
+    [dispatch]
+  );
 
   return (
     <Board
@@ -31,9 +38,15 @@ const DragDropBoard = ({ showGrid }) => {
       className={`drag-drop-board ${showGrid ? "grid" : ""}`}
     >
       {Object.keys(itemsOnBoard).map((key) => {
-        const { image, title } = itemsOnBoard[key];
+        const { id, image, title } = itemsOnBoard[key];
         return (
-          <DragItem key={key} item={itemsOnBoard[key]} className="drag-item" hideSourceOnDrag>
+          <DragItem
+            key={key}
+            item={itemsOnBoard[key]}
+            className={`drag-item ${id === selectedItemId ? "active" : ""}`}
+            hideSourceOnDrag
+            onClick={handleSelectDragItem}
+          >
             <img src={image} alt={title} className="drag-item_image" />
           </DragItem>
         );
